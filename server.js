@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
 const jsend = require('jsend');
+const dotenv = require('dotenv');
+dotenv.config({ path: './config.env' });
+const mongoose = require('mongoose');
 
 /**
  * Rota GET para obter a lista de usuários.
@@ -15,6 +18,10 @@ app.get('/api/v1/users', (req, res) => {
     })
   );
 });
+
+mongoose
+  .connect(process.env.DATABASE_URI)
+  .then(() => console.log('Conectado ao banco de dados com sucesso!'));
 
 const hostname = 'localhost';
 const port = 3000;
