@@ -14,13 +14,32 @@ app.use(express.json());
  * @description Retorna a lista de usuários no formato JSON.
  * @returns {Object} Objeto JSON com a lista de usuários.
  */
-app.get('/api/v1/users', (req, res) => {
-  res.status(200).json(
-    jsend.success({
-      name: 'Edgar Faria Barbosa',
-      email: 'edgarfbarbosa@outlook.com'
-    })
-  );
+app.get('/api/v1/users', async (req, res) => {
+  try {
+    const users = await User.find();
+
+    res.status(200).json(jsend.success(users));
+  } catch (error) {
+    res.status(404).json(jsend.fail(error.message));
+  }
+});
+
+/**
+ * Rota GET para obter um usuário específico pelo ID.
+ * @description Procura um usuário no banco de dados pelo ID fornecido na URL e retorna o usuário no formato JSON.
+ * @param {string} req.params.id - O ID do usuário que será buscado.
+ * @returns {Object} Objeto JSON com os dados do usuário.
+ * @throws {Error} Mensagem de erro caso o usuário não seja encontrado ou ocorra algum problema na busca.
+ */
+app.get('/api/v1/users/:id', async (req, res) => {
+  try {
+    console.log(typeof req.params.id);
+    const user = await User.findById(req.params.id);
+
+    res.status(200).json(jsend.success(user));
+  } catch (error) {
+    res.status(404).json(jsend.fail(error.message));
+  }
 });
 
 /**
