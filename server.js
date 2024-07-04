@@ -80,6 +80,23 @@ app.patch('/api/v1/users/:id', async (req, res) => {
   }
 });
 
+/**
+ * Rota DELETE para remover um usuario específico pelo ID.
+ * @description Remove um usuário do banco de dados pelo ID fornecido na URL.
+ * @param {string} req.params.id - ID do usuário que será removido fornecido na URL.
+ * @returns {Object} Objeto JSON com uma mensagem de sucesso indicando que o usuário foi removido.
+ * @throws {Error} Mensagem de erro caso a remoção do usuário falhe.
+ */
+app.delete('/api/v1/users/:id', async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+
+    res.status(200).json(jsend.success({ message: 'Usuário removido' }));
+  } catch (error) {
+    res.status(400).json(jsend.fail(error.message));
+  }
+});
+
 mongoose
   .connect(process.env.DATABASE_URI)
   .then(() => console.log('Conectado ao banco de dados com sucesso!'));
