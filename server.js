@@ -59,6 +59,27 @@ app.post('/api/v1/users', async (req, res) => {
   }
 });
 
+/**
+ * Rota PATCH para atualizar um usuário específico pelo ID.
+ * @description Atualiza um usuário no banco de dados com os dados fornecidos no corpo da requisição (req.body).
+ * @param {string} req.params.id - ID do usuário que será atualizado.
+ * @param {Object} req.body - Objeto JSON contendo os dados atualizados do usuário.
+ * @returns {Object} Objeto JSON contendo os dados atualizados do usuário.
+ * @throws {Error} Mensagem de erro caso a atualização do usuário falhe ou o usuário não seja encontrado.
+ */
+app.patch('/api/v1/users/:id', async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
+
+    res.status(200).json(jsend.success(user));
+  } catch (error) {
+    res.status(404).json(jsend.fail(error.message));
+  }
+});
+
 mongoose
   .connect(process.env.DATABASE_URI)
   .then(() => console.log('Conectado ao banco de dados com sucesso!'));
