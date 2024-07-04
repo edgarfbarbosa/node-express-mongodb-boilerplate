@@ -14,7 +14,7 @@ app.use(express.json());
  * @description Retorna a lista de usuários no formato JSON.
  * @returns {Object} Objeto JSON com a lista de usuários.
  */
-app.get('/api/v1/users', async (req, res) => {
+const getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
 
@@ -22,7 +22,7 @@ app.get('/api/v1/users', async (req, res) => {
   } catch (error) {
     res.status(404).json(jsend.fail(error.message));
   }
-});
+};
 
 /**
  * Rota GET para obter um usuário específico pelo ID.
@@ -31,7 +31,7 @@ app.get('/api/v1/users', async (req, res) => {
  * @returns {Object} Objeto JSON com os dados do usuário.
  * @throws {Error} Mensagem de erro caso o usuário não seja encontrado ou ocorra algum problema na busca.
  */
-app.get('/api/v1/users/:id', async (req, res) => {
+const getUser = async (req, res) => {
   try {
     console.log(typeof req.params.id);
     const user = await User.findById(req.params.id);
@@ -40,7 +40,7 @@ app.get('/api/v1/users/:id', async (req, res) => {
   } catch (error) {
     res.status(404).json(jsend.fail(error.message));
   }
-});
+};
 
 /**
  * Rota POST para criar um novo usuário.
@@ -49,7 +49,7 @@ app.get('/api/v1/users/:id', async (req, res) => {
  * @returns {Object} Objeto JSON contendo o usuário recém-criado.
  * @throws {Error} Mensagem de erro caso a criação do usuário falhe.
  */
-app.post('/api/v1/users', async (req, res) => {
+const postUser = async (req, res) => {
   try {
     const newUser = await User.create(req.body);
 
@@ -57,7 +57,7 @@ app.post('/api/v1/users', async (req, res) => {
   } catch (error) {
     res.status(400).json(jsend.fail(error.message));
   }
-});
+};
 
 /**
  * Rota PATCH para atualizar um usuário específico pelo ID.
@@ -67,7 +67,7 @@ app.post('/api/v1/users', async (req, res) => {
  * @returns {Object} Objeto JSON contendo os dados atualizados do usuário.
  * @throws {Error} Mensagem de erro caso a atualização do usuário falhe ou o usuário não seja encontrado.
  */
-app.patch('/api/v1/users/:id', async (req, res) => {
+const updateUser = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -78,7 +78,7 @@ app.patch('/api/v1/users/:id', async (req, res) => {
   } catch (error) {
     res.status(404).json(jsend.fail(error.message));
   }
-});
+};
 
 /**
  * Rota DELETE para remover um usuario específico pelo ID.
@@ -87,7 +87,7 @@ app.patch('/api/v1/users/:id', async (req, res) => {
  * @returns {Object} Objeto JSON com uma mensagem de sucesso indicando que o usuário foi removido.
  * @throws {Error} Mensagem de erro caso a remoção do usuário falhe.
  */
-app.delete('/api/v1/users/:id', async (req, res) => {
+const deleteUser = async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
 
@@ -95,7 +95,14 @@ app.delete('/api/v1/users/:id', async (req, res) => {
   } catch (error) {
     res.status(400).json(jsend.fail(error.message));
   }
-});
+};
+
+app.route('/api/v1/users').get(getAllUsers).post(postUser);
+app
+  .route('/api/v1/users/:id')
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
 
 mongoose
   .connect(process.env.DATABASE_URI)
