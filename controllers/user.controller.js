@@ -1,5 +1,6 @@
 const jsend = require('jsend');
 const User = require('./../models/user.model');
+const limitFields = require('../utils/limitFields');
 
 /**
  * Rota GET para obter a lista de usuários.
@@ -8,7 +9,12 @@ const User = require('./../models/user.model');
  */
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    let queryParameters = { ...req.query };
+    let query = User.find();
+
+    limitFields(queryParameters, query);
+
+    const users = await query;
 
     res.status(200).json(jsend.success(users));
   } catch (error) {
@@ -25,7 +31,6 @@ const getAllUsers = async (req, res) => {
  */
 const getUser = async (req, res) => {
   try {
-    console.log(typeof req.params.id);
     const user = await User.findById(req.params.id);
 
     res.status(200).json(jsend.success(user));
