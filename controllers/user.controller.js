@@ -1,6 +1,6 @@
 const jsend = require('jsend');
 const User = require('./../models/user.model');
-const limitFields = require('../utils/limitFields');
+const setFields = require('../utils/setFields');
 
 /**
  * Rota GET para obter a lista de usuários.
@@ -12,7 +12,7 @@ const getAllUsers = async (req, res) => {
     let queryParameters = { ...req.query };
     let query = User.find();
 
-    limitFields(queryParameters, query);
+    setFields(queryParameters, query);
 
     const users = await query;
 
