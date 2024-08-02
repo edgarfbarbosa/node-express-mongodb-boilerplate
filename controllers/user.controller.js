@@ -12,7 +12,7 @@ const getAllUsers = async (req, res) => {
     let queryParameters = { ...req.query };
     let query = User.find();
 
-    setFields(queryParameters, query);
+    setFields(queryParameters.fields, query);
 
     const users = await query;
 
