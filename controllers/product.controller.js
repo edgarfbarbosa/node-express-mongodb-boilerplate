@@ -2,6 +2,7 @@ const jsend = require('jsend');
 const Product = require('../models/product.model');
 const setFields = require('../utils/setFields');
 const setPagination = require('../utils/setPagination');
+const setSort = require('../utils/setSort');
 
 const getAllProducts = async (req, res) => {
   try {
@@ -11,6 +12,7 @@ const getAllProducts = async (req, res) => {
 
     setFields(queryParameters.fields, query);
     setPagination(queryParameters.page, queryParameters.limit, query);
+    setSort(queryParameters.sort, query);
 
     const products = await query;
 
