@@ -11,7 +11,7 @@ const productSchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
-  collection: String,
+  brand: String,
   price: {
     type: Number,
     required: [true, 'O produto deve ter um preço']
