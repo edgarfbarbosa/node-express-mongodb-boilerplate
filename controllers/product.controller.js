@@ -6,13 +6,14 @@ const setSort = require('../utils/setSort');
 
 const getAllProducts = async (req, res) => {
   try {
-    let queryParameters = { ...req.query };
+    let queryParams = { ...req.query };
+    const { fields, page, limit, sort } = queryParams;
 
     let query = Product.find();
 
-    setFields(queryParameters.fields, query);
-    setPagination(queryParameters.page, queryParameters.limit, query);
-    setSort(queryParameters.sort, query);
+    if (fields) setFields(fields, query);
+    if (page && limit) setPagination(page, limit, query);
+    if (sort) setSort(sort, query);
 
     const products = await query;
 
