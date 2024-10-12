@@ -6,6 +6,8 @@ const jsend = require('jsend');
 const userRouter = require('./routes/user.routes');
 const productRouter = require('./routes/product.routes');
 
+const handleError = require('./utils/handleError');
+
 const app = express();
 
 app.use(cors());
@@ -26,6 +28,10 @@ app.all('*', (req, res, next) => {
         'Rota não encontrada! Por favor, verifique se digitou a URL corretamente.'
     })
   );
+});
+
+app.use((err, req, res, next) => {
+  handleError(err, res);
 });
 
 module.exports = app;
