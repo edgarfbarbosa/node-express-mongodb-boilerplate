@@ -1,16 +1,18 @@
 const jsend = require('jsend');
 
 const handleError = (err, res) => {
-  let { httpStatusCode, message } = err;
+  err.httpStatusCode = err.httpStatusCode || 500;
 
   if (process.env.NODE_ENV !== 'development') {
-    httpStatusCode = 500;
-    message = 'Algo deu errado';
+    err.httpStatusCode = 500;
+    err.message = 'Algo deu errado';
+  } else {
+    console.error(err.stack);
   }
 
-  res.status(httpStatusCode).json(
+  res.status(err.httpStatusCode).json(
     jsend.fail({
-      message
+      message: err.message
     })
   );
 };
