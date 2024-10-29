@@ -7,6 +7,7 @@ const userRouter = require('./routes/user.routes');
 const productRouter = require('./routes/product.routes');
 
 const handleError = require('./utils/handleError');
+const AppError = require('./utils/AppError');
 
 const app = express();
 
@@ -22,11 +23,11 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
 
 app.all('*', (req, res, next) => {
-  res.status(404).json(
-    jsend.fail({
-      message:
-        'Rota não encontrada! Por favor, verifique se digitou a URL corretamente.'
-    })
+  next(
+    new AppError(
+      'Rota não encontrada! Por favor, verifique se digitou a URL corretamente.',
+      404
+    )
   );
 });
 
